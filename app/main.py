@@ -1,10 +1,11 @@
 from fastapi import FastAPI, status
 from uuid import UUID, uuid4
 from app import schemas
+from app import routes
 
 app = FastAPI()
 
-# app.include_router(routes.router)
+app.include_router(routes.router)
 
 
 @app.get(
