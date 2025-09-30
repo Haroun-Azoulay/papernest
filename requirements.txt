@@ -1,2 +1,6 @@
 fastapi[standard]
+uvicorn
+httpx
+pandas
+#pyproj - Uncomments if you use lambert function on services.py.
 
