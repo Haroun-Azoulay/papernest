@@ -12,7 +12,7 @@ JOBS = {}
 @router.post(
     "/job-submission",
     tags=["Job"],
-    status_code=status.HTTP_201_OK,
+    status_code=status.HTTP_200_OK,
     summary="Create Job",
     description="Check if the cover is present on the address.",
     responses={
