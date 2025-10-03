@@ -1,0 +1,204 @@
+/* app.component.css */
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to right, #ff6e7f, #bfe9ff);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-attachment: fixed;
+}
+
+/* Container */
+.note-form {
+    background-color: #ffffff;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    width: 500px;
+    text-align: left;
+    border-top: 5px solid #d9534f;
+    position: relative;
+    overflow: hidden;
+    background-image: url('https://example.com/disaster-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+}
+
+.emergency-form::before {
+    content: '';
+    background: rgba(255, 255, 255, 0.8);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+}
+
+.emergency-form>* {
+    position: relative;
+    z-index: 1;
+}
+
+/* Headings */
+h2 {
+    color: green;
+    margin-top: 0;
+    border-bottom: 2px solid green;
+    padding-bottom: 10px;
+    font-size: 24px;
+}
+
+.alive { color: #16a34a; }
+.dead  { color: #dc2626; }
+
+/* Paragraph */
+p {
+    color: #555;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+/* Form Styles */
+form {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+/* Button Styles */
+button {
+    width: 100%;
+    padding: 15px;
+    background-color: green;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.editbtn {
+    width: 50%;
+    margin: 1px;
+    background-color: green;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.deletebtn {
+    width: 50%;
+    margin: 1px;
+    background-color: red;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+/* Existing Emergencies Section */
+.existing-notes {
+    margin-top: 40px;
+}
+
+.existing-notes h2 {
+    color: #d9534f;
+}
+
+.existing-notes ul {
+    list-style: none;
+    padding: 0;
+}
+
+.existing-notes li {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    /* Aligns content and actions side by side */
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+
+.existing-notes li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.existing-notes li::before {
+    content: '?';
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-size: 24px;
+    color: #0e4b07;
+}
+
+.existing-notes li strong {
+    color: #333;
+    display: block;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 600px) {
+    .emergency-form {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .form-group input,
+    button {
+        padding: 10px;
+    }
+
+    button {
+        font-size: 16px;
+    }
+}

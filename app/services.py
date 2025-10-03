@@ -1,6 +1,7 @@
 # import pyproj - it's the package to use the function lamber93 if i change the API.
 import pandas
 import httpx
+from fastapi import HTTPException
 
 # Memo
 # 2G : 30km
@@ -52,20 +53,31 @@ async def fetch_geocode(address) -> dict:
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.get(GEO_URL, params={"q": address})
-            payload = response.json()
-            if (
-                "q: Must contain between 3 and 200 chars and start with a number or a letter."
-                in str(payload)
-            ):
+            try:
+                payload = response.json()
+            except ValueError:
                 raise HTTPException(
-                    status_code=400,
-                    detail=f"Error : must contain between 3 and 200 chars and start with a number or a letter.",
+                    status_code=502,
+                    detail="API gouv returned an invalid JSON response.",
                 )
-            if not payload["features"]:
-                raise HTTPException(status_code=404, detail=f"Error : data not found.")
+                if (
+                    "q: Must contain between 3 and 200 chars and start with a number or a letter."
+                    in str(payload)
+                ):
+                    raise HTTPException(
+                        status_code=400,
+                        detail=f"Error : must contain between 3 and 200 chars and start with a number or a letter.",
+                    )
+            features = payload.get("features")
+            if not features:
+                raise HTTPException(status_code=404, detail="No data for this address.")
             return payload
     except httpx.RequestError as e:
         raise HTTPException(status_code=500, detail=f"Error network: {e}.")
+    except httpx.ReadTimeout:
+        raise HTTPException(
+            status_code=504, detail="Api gouv not respond in time (timeout)."
+        )
 
 
 # If I don t start with the lambert coordinates and i only use the gps coordinates but I use the gov API so I get lambert back.

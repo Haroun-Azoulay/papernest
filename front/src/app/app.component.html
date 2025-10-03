@@ -1,0 +1,15 @@
+<!-- /src/app/app.component.html -->
+
+<div class="note-form">
+    <h2>Papernest</h2>
+    <h3>The Api is :
+<ng-container *ngIf="alive$ | async as alive; else deadTpl">
+    <span class="alive">Online</span>
+      <br>
+    <button [routerLink]="['/search']" style="text-align: center; border: 2px solid grey; padding: 20px;">Search</button>
+</ng-container>
+<ng-template #deadTpl>
+  <span class="dead">Offline</span>
+</ng-template>
+    </h3>
+</div>

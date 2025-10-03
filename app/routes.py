@@ -20,15 +20,14 @@ JOBS = {}
     },
 )
 async def create_job(addresses: schemas.AddressesIn):
-    data = addresses.root
     job_id = uuid4()
+    results: dict[str, dict] = {}
     try:
-        for idAddress, address in addresses.root.items():
+        for idaddress, address in addresses.root.items():
             response = await services.fetch_geocode(address)
             dataCoords = services.parsing_coords_gouv(response)
             dataMobileCoverage = services.read_csv(dataCoords[0], dataCoords[1])
-            response = JOBS.setdefault(idAddress, {})
-            response.update(dataMobileCoverage)
-        return schemas.JobResponse(jobsUUID=job_id, jobs=JOBS)
+            results[idaddress] = dataMobileCoverage
+        return schemas.JobResponse(jobsUUID=job_id, jobs=results)
     except httpx.RequestError as e:
-        raise HTTPException(status_code=500, detail=f"Error network: {e}.")
+        raise httpException(status_code=500, detail=f"error network: {e}.")
