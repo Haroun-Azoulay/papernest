@@ -20,6 +20,20 @@ elif [[ $1 == "all" ]]; then
 
     echo "[WAIT -------------------------- Launching your Docker compose...]"
     docker compose up --build
+elif [[ $1 == "test" ]]; then
+
+    echo "[WAIT -------------------------- Launching your Docker compose...]"
+    docker compose up -d --build
+
+    CONTAINER_ID=$(docker ps -q -f name=papernest-papernest-back_end)
+    echo "$CONTAINER_ID"
+
+    echo "[WAIT -------------------------- Launching Backend Test...]"
+    docker exec -ti "$CONTAINER_ID" bash -c "cd /app && pytest"
+
+    echo "[WAIT -------------------------- Shut down Docker compose...]"
+    docker compose down
+    exit 1
 fi
 launchApp() {
     echo -e "What do you want to do? Type 'run all' to launch all, 'run back' to launch the backend, 'run front' to launch the frontend or 'help' to see instructions or 'exit' to leave the script: \n"
@@ -42,11 +56,23 @@ launchApp() {
         docker build -t build paper-front .
 
         echo "[INFO -------------------------- Launching your container on port 80]"
-
         docker run -ti -p 8080:80 paper-front
     elif [[ "$response" == "run all" ]]; then
         echo "[WAIT -------------------------- Launching your Docker compose...]"
         docker compose up --build
+
+    elif [[ "$response" == "run test" ]]; then
+        echo "[WAIT -------------------------- Launching your Docker compose...]"
+        docker compose up -d --build
+
+        CONTAINER_ID=$(docker ps -q -f name=papernest-papernest-back_end)
+        echo "$CONTAINER_ID"
+
+        echo "[WAIT -------------------------- Launching Backend Test...]"
+        docker exec -ti "$CONTAINER_ID" bash -c "cd /app && pytest"
+
+        echo "[WAIT -------------------------- Shut down Docker compose...]"
+        docker compose down
 
     elif [[ "$response" == "help" ]]; then
         echo
@@ -55,6 +81,7 @@ launchApp() {
         echo "  run all   -> Build the Docker compose, run the backend container on port 8080 and run the frontend container on port 8080"
         echo "  run back   -> Build the Docker backend image and run the backend container on port 8000"
         echo "  run frontend   -> Build the Docker frontend image and run the frontend container on port 8080"
+        echo "  run test   -> Build the Docker compose, run the backend container on port 8080, run the frontend container on port 8080, test backend and shutdown the Docker compose"
         echo "  help  -> Display this help message"
         echo "  exit  -> Quit the script"
         echo
