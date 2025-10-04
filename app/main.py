@@ -9,6 +9,7 @@ app = FastAPI()
 
 origins = [
     "http://localhost:8080",
+    # Url for the frontend without docker
     "http://localhost:4200",
 ]
 

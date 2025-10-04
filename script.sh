@@ -29,14 +29,28 @@ elif [[ $1 == "test" ]]; then
     echo "$CONTAINER_ID"
 
     echo "[WAIT -------------------------- Launching Backend Test...]"
-    docker exec -ti "$CONTAINER_ID" bash -c "cd /app && pytest"
+    docker exec -ti "$CONTAINER_ID" bash -c "cd /app && pytest -vv"
+
+    echo "[WAIT -------------------------- Shut down Docker compose...]"
+    docker compose down
+    exit 1
+elif [[ $1 == "coverage" ]]; then
+
+    echo "[WAIT -------------------------- Launching your Docker compose...]"
+    docker compose up -d --build
+
+    CONTAINER_ID=$(docker ps -q -f name=papernest-papernest-back_end)
+    echo "$CONTAINER_ID"
+
+    echo "[WAIT -------------------------- Launching coverage Backend Test...]"
+    docker exec -ti "$CONTAINER_ID" bash -c "cd /app && pytest --cov=app --cov-report=term-missing app/tests/"
 
     echo "[WAIT -------------------------- Shut down Docker compose...]"
     docker compose down
     exit 1
 fi
 launchApp() {
-    echo -e "What do you want to do? Type 'run all' to launch all, 'run back' to launch the backend, 'run front' to launch the frontend or 'help' to see instructions or 'exit' to leave the script: \n"
+    echo -e "What do you want to do? Type 'run all' to launch all, 'run back' to launch the backend, 'run front' to launch the frontend, 'run test' to launch all tests, 'run coverage' to launch and display coverage raport or 'help' to see instructions or 'exit' to leave the script: \n"
 
     read -r response
     response=$(echo "$response")
@@ -74,6 +88,21 @@ launchApp() {
         echo "[WAIT -------------------------- Shut down Docker compose...]"
         docker compose down
 
+    elif [[ $response == "run coverage" ]]; then
+
+        echo "[WAIT -------------------------- Launching your Docker compose...]"
+        docker compose up -d --build
+
+        CONTAINER_ID=$(docker ps -q -f name=papernest-papernest-back_end)
+        echo "$CONTAINER_ID"
+
+        echo "[WAIT -------------------------- Launching coverage Backend Test...]"
+        docker exec -ti "$CONTAINER_ID" bash -c "cd /app && pytest --cov=app --cov-report=term-missing app/tests/"
+
+        echo "[WAIT -------------------------- Shut down Docker compose...]"
+        docker compose down
+        exit 1
+
     elif [[ "$response" == "help" ]]; then
         echo
         echo "=================== HELP ==================="
@@ -82,6 +111,7 @@ launchApp() {
         echo "  run back   -> Build the Docker backend image and run the backend container on port 8000"
         echo "  run frontend   -> Build the Docker frontend image and run the frontend container on port 8080"
         echo "  run test   -> Build the Docker compose, run the backend container on port 8080, run the frontend container on port 8080, test backend and shutdown the Docker compose"
+        echo "  run coverage -> Build the Docker compose, run the backend container on port 8080, run the frontend container on port 8080, display coverage backend and shutdown the Docker compose"
         echo "  help  -> Display this help message"
         echo "  exit  -> Quit the script"
         echo
