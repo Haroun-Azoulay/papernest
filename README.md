@@ -1,4 +1,4 @@
-# the Project is technical test for papernest
+# The Project is technical test for papernest
 
 .
 
