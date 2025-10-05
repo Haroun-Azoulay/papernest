@@ -1,10 +1,6 @@
 # The Project is technical test for papernest
 
-.
-
 I have a CSV who contains coverage mobile in lambert data. And i must call Api gouv to retrieve coordonates and verifiy with a specific circonference the coverage 2G : 30km, 3G : 5km,4G : 10km, if it's true or wrong.
-
-
 
 
 ## 🛠️ Install Dependencies
