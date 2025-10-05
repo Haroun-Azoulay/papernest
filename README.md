@@ -137,6 +137,11 @@ curl -X POST http://localhost:8000/job-submission \
 
 You can add this queries to look on the dashboard's graph in Prometheus
 
+
+### Prometheus screen
+
+![Cover](https://github.com/Haroun-Azoulay/papernest/blob/master/img/img-prometheus.png)
+
 ### Error rate in % over the last day.
 ```
 100 * sum(rate(job_requests_total{result="error"}[1d]))
@@ -158,3 +163,6 @@ sum(rate(job_requests_total[5m]))
 
 ## ✅ You can run the postman collection to run the collection manually
 
+### Postman screen
+
+![Cover](https://github.com/Haroun-Azoulay/papernest/blob/master/img/img-postman_collection.png)
