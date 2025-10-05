@@ -54,14 +54,13 @@ async def fetch_geocode(address) -> dict:
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.get(GEO_URL, params={"q": address})
+            if len(address) <= 2 or len(address) > 200 :
+                raise HTTPException(
+                    status_code=400,
+                    detail="Error : must contain between 3 and 200 chars and start with a number or a letter.",
+                )
             try:
                 payload = response.json()
-
-                if len(payload.get("query")) <= 2:
-                    raise HTTPException(
-                        status_code=400,
-                        detail="Error : must contain between 3 and 200 chars and start with a number or a letter.",
-                    )
             except ValueError:
                 raise HTTPException(
                     status_code=502,

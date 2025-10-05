@@ -1,4 +1,6 @@
-# the Project is technical test for papernest.
+# the Project is technical test for papernest
+
+.
 
 I have a CSV who contains coverage mobile in lambert data. And i must call Api gouv to retrieve coordonates and verifiy with a specific circonference the coverage 2G : 30km, 3G : 5km,4G : 10km, if it's true or wrong.
 
@@ -18,6 +20,27 @@ The project includes a helper script to simplify developer tasks (running, gener
 bash script.sh help
 ```
 You have got multiple option if you want run all write :
+```bash
+bash script.sh all# The Project is a technical test for papernest.
+
+I have a CSV who contains coverage mobile in lambert data. And i must call Api gouv to retrieve coordonates and verifiy with a specific circonference the coverage 2G : 30km, 3G : 5km,4G : 10km, if it's true or wrong.
+
+
+
+
+## 🛠️ Install Dependencies
+
+1. If not already done, install Docker Compose (v2.10+)
+
+🧰 Bash Automation Script
+
+The project includes a helper script to simplify developer tasks (running, generating reports, etc.).
+
+2. Run the script bash and write flag help: 
+```bash :
+bash script.sh help
+```
+You have got multiple option if you want all run :
 ```bash
 bash script.sh all
 ```
@@ -68,7 +91,7 @@ you have swagger please check this url
 
 or you have collection postman to execute schedule runs
 
-Examples : 
+Example : 
 
 ```
 curl -X POST http://localhost:8000/job-submission \
@@ -81,7 +104,7 @@ curl -X POST http://localhost:8000/job-submission \
 
 ```
 
-##### Response
+##### Response :
 
 ```
 {
@@ -110,6 +133,28 @@ curl -X POST http://localhost:8000/job-submission \
 
 
 
+## 📈 queries prometheus example 
 
+You can add this queries to look on the dashboard's graph in Prometheus
 
-   
+### Error rate in % over the last day.
+```
+100 * sum(rate(job_requests_total{result="error"}[1d]))
+  / sum(rate(job_requests_total[1d]))
+```
+
+### Items processed per second over the last 5 minutes.
+```
+- sum(rate(job_items_processed_total[5m]))
+ ```
+### Total all job requests
+```
+job_requests_total
+```
+### RPS over 5 minutes
+```
+sum(rate(job_requests_total[5m]))
+```
+
+## ✅ You can run the postman collection to run the collection manually
+

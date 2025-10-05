@@ -27,7 +27,13 @@ app.add_middleware(
 app.include_router(routes.router)
 
 
-@app.get("/metrics")
+@app.get(
+    "/metrics",
+    status_code=status.HTTP_200_OK,
+    tags=["Metrics"],
+    summary="Collect metrics",
+    description="Look on metrics on a url at localhost:9090.",
+)
 def metrics():
     return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
