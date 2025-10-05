@@ -50,7 +50,7 @@ elif [[ $1 == "coverage" ]]; then
     exit 1
 fi
 launchApp() {
-    echo -e "What do you want to do? Type 'run all' to launch all, 'run back' to launch the backend, 'run front' to launch the frontend, 'run test' to launch all tests, 'run coverage' to launch and display coverage raport or 'help' to see instructions or 'exit' to leave the script: \n"
+    echo -e "What do you want to do? Type 'run all' to launch all, 'run back' to launch the backend, 'run front' to launch the frontend, 'run test' to launch all tests, 'run coverage' to launch and display coverage raport, 'run delete' to shutdown docker compose and delete all volumes or 'help' to see instructions or 'exit' to leave the script: \n"
 
     read -r response
     response=$(echo "$response")
@@ -102,6 +102,11 @@ launchApp() {
         echo "[WAIT -------------------------- Shut down Docker compose...]"
         docker compose down
         exit 1
+    elif [[ $response == "run delete" ]]; then
+
+        echo "[WAIT -------------------------- Shut down Docker compose and delete all volumes...]"
+        docker compose down -v
+        exit 1
 
     elif [[ "$response" == "help" ]]; then
         echo
@@ -112,6 +117,7 @@ launchApp() {
         echo "  run frontend   -> Build the Docker frontend image and run the frontend container on port 8080"
         echo "  run test   -> Build the Docker compose, run the backend container on port 8080, run the frontend container on port 8080, test backend and shutdown the Docker compose"
         echo "  run coverage -> Build the Docker compose, run the backend container on port 8080, run the frontend container on port 8080, display coverage backend and shutdown the Docker compose"
+        echo "  run delete -> Delete all volumes on Docker compose"
         echo "  help  -> Display this help message"
         echo "  exit  -> Quit the script"
         echo

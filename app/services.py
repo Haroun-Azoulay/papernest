@@ -2,6 +2,7 @@
 import pandas
 import httpx
 from fastapi import HTTPException
+from array import array
 
 # Memo
 # 2G : 30km
@@ -55,25 +56,37 @@ async def fetch_geocode(address) -> dict:
             response = await client.get(GEO_URL, params={"q": address})
             try:
                 payload = response.json()
-            except ValueError:
-                raise HTTPException(status_code=502, detail="API gouv returned an invalid JSON response.")
-                if (
-                    "q: Must contain between 3 and 200 chars and start with a number or a letter."
-                    in str(payload)
-                ):
+
+                if len(payload.get("query")) <= 2:
                     raise HTTPException(
                         status_code=400,
-                        detail=f"Error : must contain between 3 and 200 chars and start with a number or a letter.",
+                        detail="Error : must contain between 3 and 200 chars and start with a number or a letter.",
                     )
+            except ValueError:
+                raise HTTPException(
+                    status_code=502,
+                    detail="API gouv returned an invalid JSON response.",
+                )
             features = payload.get("features")
             if not features:
                 raise HTTPException(status_code=404, detail="No data for this address.")
+
             return payload
+
     except httpx.ReadTimeout:
-        raise HTTPException(status_code=504,detail="Api gouv not respond in time (timeout)."
+        raise HTTPException(
+            status_code=504, detail="Api gouv not respond in time (timeout)."
         )
     except httpx.RequestError as e:
         raise HTTPException(status_code=500, detail=f"Error network: {e}.")
+
+
+def convert_ms(totalMs) -> array:
+    h = totalMs // 3600000
+    m = (totalMs % 3600000) // 60000
+    s = (totalMs % 60000) // 1000
+    ms = totalMs % 1000
+    return [h, m, s, ms]
 
 
 # If I don t start with the lambert coordinates and i only use the gps coordinates but I use the gov API so I get lambert back.

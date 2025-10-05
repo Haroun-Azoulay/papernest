@@ -1,11 +1,13 @@
-from fastapi import FastAPI, status
+from fastapi import FastAPI, status, Response
 from fastapi.middleware.cors import CORSMiddleware
 from uuid import UUID, uuid4
-from app import schemas
-from app import routes
+from app import schemas, routes, models
+from app.database import engine, Base
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-
 
 origins = [
     "http://localhost:8080",
@@ -23,6 +25,11 @@ app.add_middleware(
 
 
 app.include_router(routes.router)
+
+
+@app.get("/metrics")
+def metrics():
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 
 @app.get(

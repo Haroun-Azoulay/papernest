@@ -1,18 +1,31 @@
+services:
+  papernest-back_end:
+    build: .
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+    volumes:
+      - ./db:/app/db:Z
+
+  papernest-front_end:
+    build: ./front
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro,Z
+    networks:
+      - app-network
+    ports:
+      - 9090:9090
+
 networks:
   app-network:
     driver: bridge
-
-services:
-    papernest-back_end:
-      build: .
-      ports:
-        - "8000:8000"
-      networks:
-        - app-network
-
-    papernest-front_end:
-      build: ./front
-      ports:
-        - "8080:80"
-      networks:
-        - app-network
+volumes:
+  db-data:

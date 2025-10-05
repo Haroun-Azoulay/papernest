@@ -62,29 +62,31 @@ def test_fetchgeo_code():
     )
 
     assert response.status_code == 200
-    
+
 
 def test_fetchgeo_short_search():
     address = "ab"
 
     response = requests.get(
         "https://data.geopf.fr/geocodage/search", params={"q": address}
-    ) 
+    )
     assert response.status_code == 400
-   
+
 
 def test_fetchgeo_json_invalid(monkeypatch):
-    
+
     async def fake_get(self, *args, **kwargs):
         return httpx.Response(
             status_code=200,
             content=b"<<<not-json>>>",
             headers={"content-type": "application/json"},
         )
- 
+
     monkeypatch.setattr(httpx.AsyncClient, "get", fake_get, raising=True)
 
-    response = client.post("/job-submission", json={"id": "14 chemin de la bezou 6540 romagnat"})
+    response = client.post(
+        "/job-submission", json={"id": "14 chemin de la bezou 6540 romagnat"}
+    )
 
     assert response.status_code == 502
     assert response.json()["detail"] == "API gouv returned an invalid JSON response."
@@ -100,25 +102,26 @@ def test_fetchgeo_no_data(monkeypatch):
     "query": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"}""",
             headers={"content-type": "application/json"},
         )
- 
+
     monkeypatch.setattr(httpx.AsyncClient, "get", fake_get, raising=True)
 
-    response = client.post("/job-submission", json={"id": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"})
+    response = client.post(
+        "/job-submission", json={"id": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"}
+    )
 
     assert response.status_code == 404
     assert response.json()["detail"] == "No data for this address."
 
 
-
-
 def test_fetchgeo_network(monkeypatch):
-    async def fake_get(self, *args, **kwargs): 
+    async def fake_get(self, *args, **kwargs):
         raise httpx.RequestError("error")
-    
+
     monkeypatch.setattr(httpx.AsyncClient, "get", fake_get, raising=True)
 
-    response = client.post("/job-submission",
-                    json={"id": "14 chemin de la bezou 6540 romagnat"})
+    response = client.post(
+        "/job-submission", json={"id": "14 chemin de la bezou 6540 romagnat"}
+    )
     assert response.status_code == 500
     assert response.json()["detail"].startswith("Error network:")
 
@@ -129,7 +132,8 @@ def test_fetchgeo_timeout_504(monkeypatch):
 
     monkeypatch.setattr(httpx.AsyncClient, "get", fake_get, raising=True)
 
-    response = client.post("/job-submission",
-    json={"id": "14 chemin de la bezou 6540 romagnat"})
+    response = client.post(
+        "/job-submission", json={"id": "14 chemin de la bezou 6540 romagnat"}
+    )
     assert response.status_code == 504
     assert "timeout" in response.json()["detail"]

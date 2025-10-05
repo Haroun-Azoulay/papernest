@@ -6,3 +6,6 @@ pandas
 pytest
 pytest-cov
 requests
+sqlalchemy
+prometheus-client
+
