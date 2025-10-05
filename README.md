@@ -145,7 +145,7 @@ You can add this queries to look on the dashboard's graph in Prometheus
 
 ### Items processed per second over the last 5 minutes.
 ```
-- sum(rate(job_items_processed_total[5m]))
+sum(rate(job_items_processed_total[5m]))
  ```
 ### Total all job requests
 ```
