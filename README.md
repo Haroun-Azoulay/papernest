@@ -157,7 +157,7 @@ job_requests_total
 sum(rate(job_requests_total[5m]))
 ```
 
-## ✅ You can run the postman collection to run the collection manually
+### ✅ You can run the postman collection to execute the collection manually
 
 ### Postman screen
 
