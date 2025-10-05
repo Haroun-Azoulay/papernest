@@ -20,28 +20,6 @@ You have got multiple option if you want run all write :
 bash script.sh all
 ```
 
-## 🛠️ Install Dependencies
-
-1. If not already done, install Docker Compose (v2.10+)
-
-🧰 Bash Automation Script
-
-The project includes a helper script to simplify developer tasks (running, generating reports, etc.).
-
-2. Run the script bash and write flag help: 
-```bash :
-bash script.sh help
-```
-You have got multiple option if you want all run :
-```bash
-bash script.sh all
-```
-Or if you want run rapport about coverage :
-
-```bash
-bash script.sh coverage
-```
-
 ### Expected Ports
 
 8000 → FastAPI or 8000/docs to look swagger
